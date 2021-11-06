@@ -3,10 +3,12 @@ package kz.zhelezyaka.services;
 import kz.zhelezyaka.api.v1.mapper.CategoryMapper;
 import kz.zhelezyaka.api.v1.model.CategoryDTO;
 import kz.zhelezyaka.repositories.CategoryRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
