@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
-    private  CustomerMapper customerMapper;
-    private  CustomerRepository customerRepository;
+    private CustomerMapper customerMapper;
+    private CustomerRepository customerRepository;
 
     @Autowired
-    public void setCustomerMapper(CustomerMapper customerMapper){
+    public void setCustomerMapper(CustomerMapper customerMapper) {
         this.customerMapper = customerMapper;
     }
 
@@ -46,12 +46,20 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
-        Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
+        return saveAndReturnDTO(customerMapper.customerDtoToCustomer(customerDTO));
+    }
+
+    private CustomerDTO saveAndReturnDTO(Customer customer) {
         Customer savedCustomer = customerRepository.save(customer);
         CustomerDTO returnDto = customerMapper.customerToCustomerDTO(savedCustomer);
         returnDto.setCustomerUrl("/api/v1/customer/" + savedCustomer.getId());
         return returnDto;
     }
 
-
+    @Override
+    public CustomerDTO saveCustomerByDTO(Long id, CustomerDTO customerDTO) {
+        Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
+        customer.setId(id);
+        return saveAndReturnDTO(customer);
+    }
 }
