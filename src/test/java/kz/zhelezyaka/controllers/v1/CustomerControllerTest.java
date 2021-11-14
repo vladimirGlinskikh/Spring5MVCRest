@@ -1,6 +1,7 @@
 package kz.zhelezyaka.controllers.v1;
 
 import kz.zhelezyaka.api.v1.model.CustomerDTO;
+import kz.zhelezyaka.domain.Customer;
 import kz.zhelezyaka.services.CustomerService;
 import org.junit.Before;
 import org.junit.Test;
@@ -115,6 +116,27 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname", equalTo("Fred")))
                 .andExpect(jsonPath("$.lastname", equalTo("Flinstone")))
+                .andExpect(jsonPath("$.customer_url", equalTo("/api/v1/customers/1")));
+    }
+
+    @Test
+    public void testPatchCustomer() throws Exception {
+        CustomerDTO customer = new CustomerDTO();
+        customer.setFirstname("Vladimir");
+
+        CustomerDTO returnDTO = new CustomerDTO();
+        returnDTO.setFirstname(customer.getFirstname());
+        returnDTO.setLastname("Glinskikh");
+        returnDTO.setCustomerUrl("/api/v1/customers/1");
+
+        when(customerService.patchCustomer(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
+
+        mockMvc.perform(patch("/api/v1/customers/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(customer)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstname", equalTo("Vladimir")))
+                .andExpect(jsonPath("$.lastname", equalTo("Glinskikh")))
                 .andExpect(jsonPath("$.customer_url", equalTo("/api/v1/customers/1")));
     }
 }
