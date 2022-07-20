@@ -1,6 +1,7 @@
 package kz.zhelezyaka.controllers.v1;
 
 import kz.zhelezyaka.api.v1.model.CustomerDTO;
+import kz.zhelezyaka.controllers.RestResponseEntityExceptionHandler;
 import kz.zhelezyaka.domain.Customer;
 import kz.zhelezyaka.services.CustomerService;
 import org.junit.Before;
@@ -37,7 +38,9 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                .build();
     }
 
     @Test
