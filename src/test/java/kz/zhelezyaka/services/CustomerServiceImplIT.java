@@ -6,6 +6,7 @@ import kz.zhelezyaka.bootstrap.Bootstrap;
 import kz.zhelezyaka.domain.Customer;
 import kz.zhelezyaka.repositories.CategoryRepository;
 import kz.zhelezyaka.repositories.CustomerRepository;
+import kz.zhelezyaka.repositories.VendorRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +32,9 @@ public class CustomerServiceImplIT {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    VendorRepository vendorRepository;
+
     CustomerService customerService;
 
     @Before
@@ -38,7 +42,7 @@ public class CustomerServiceImplIT {
         System.out.println("Loading Customer Data");
         System.out.println(customerRepository.findAll().size());
 
-        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository);
+        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, vendorRepository);
         bootstrap.run();
 
         customerService = new CustomerServiceImpl(CustomerMapper.INSTANCE, customerRepository);
@@ -93,7 +97,7 @@ public class CustomerServiceImplIT {
         assertThat(originalLastName, not(equalTo(updatedCustomer.getLastname())));
     }
 
-    private Long getCustomerIdValue(){
+    private Long getCustomerIdValue() {
         List<Customer> customers = customerRepository.findAll();
 
         System.out.println("Customers Found: " + customers.size());
